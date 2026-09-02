@@ -1,0 +1,13 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "Expense Approver Agent",
+  "description": "Confidential enterprise expense approver running inside the T3N TEE. Evaluates expense submissions against a policy (amount bands, category allowlist, duplicate detection) without raw PII ever entering WASM memory; persists only anonymized audit records and returns decision + reasons + audit digest. Built for the T3N ADK bounty challenge.",
+  "services": [
+    {
+      "name": "DID",
+      "endpoint": "did:t3n:a47d9e420654150ffb664311f886990e60a51037",
+      "version": "v1"
+    }
+  ],
+  "x402Support": false
+}

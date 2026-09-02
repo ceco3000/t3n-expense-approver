@@ -1,0 +1,20 @@
+{
+  "name": "t3n-agent-build-challenge",
+  "version": "1.0.0",
+  "description": "- **任务名**：Try out new docs to build a trusted agent with Terminal 3 - **slug**：`t3n-agent-build-challenge` - **类型**：Bounty（HUMAN_ONLY——人机协作：AI 做内容，用户账号提交） - **奖励**：总 $290 USDC（1st $100 / 2nd-3rd $50 / 4th-6th $30） - **截止**：2026-09-16（14 天，从 9/2 起） - **状态**：in_progress - **赢家公告**：约 9 月中下旬",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@terminal3/t3n-sdk": "5.2.0",
+    "tsx": "^4.23.13"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1"
+  }
+}

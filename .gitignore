@@ -1,0 +1,5 @@
+.env
+node_modules/
+target/
+*.wasm
+z-tenant-flight/

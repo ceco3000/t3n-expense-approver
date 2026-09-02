@@ -1,0 +1,47 @@
+/// z-expense-approver WIT world — confidential enterprise expense approval.
+///
+/// Imports required host capabilities:
+///   - tenant-context: tenant DID, cluster timestamp
+///   - logging:        debug / info / error lines
+///   - kv-store:       approval ledger (`z:<tid>:expense-ledger`) +
+///                     policy config (`z:<tid>:expense-policy`)
+///
+/// Design goal: expense submissions are validated INSIDE the TEE before any
+/// decision is recorded. Raw submissions never leave the enclave; only the
+/// decision, reasons, and an audit digest are persisted and returned.
+/// PII-bearing fields (employee_id, receipt_ref) are hashed before storage.
+package z:expense-approver@0.1.0;
+
+world expense-approver {
+    import host:tenant/tenant-context@1.0.0;
+    import host:interfaces/logging@2.1.0;
+    import host:interfaces/kv-store@2.1.0;
+
+    export contracts;
+}
+
+interface contracts {
+    /// Standard 3-field envelope used by all contracts callable from the node.
+    /// `input`        — JSON-serialized request payload specific to the function.
+    /// `user-profile` — always None for tenant contracts (hardcoded at dispatch).
+    /// `context`      — JSON-serialized DynamicContext (node-minted, trusted).
+    record generic-input {
+        input:        option<list<u8>>,
+        user-profile: option<list<u8>>,
+        context:      option<list<u8>>,
+    }
+
+    /// Submit an expense for confidential policy evaluation.
+    /// Input  (JSON): { employee_id, category, amount_usd, description,
+    ///                  merchant, receipt_ref }
+    /// Output (JSON): { decision: "approved"|"pending"|"rejected",
+    ///                  reasons: [..], record_id, audit_digest }
+    /// Duplicate detection: sha256(receipt_ref) is stored in the approval
+    /// ledger; a second submission with the same receipt is rejected.
+    submit-expense: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// List recorded decisions (most recent first, capped at 50).
+    /// Output (JSON): { approvals: [{ record_id, decision, category,
+    ///                  amount_usd, submitted_at }] }
+    list-approvals: func(req: generic-input) -> result<list<u8>, string>;
+}
