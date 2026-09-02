@@ -74,6 +74,9 @@ async function call(fn: string, input: unknown) {
   });
 }
 
+// 场景 1-3 用每次运行唯一的收据（演示可重放）；场景 4 复用场景 1 的收据做真重复测试
+const runId = Date.now();
+
 // 场景 1：小额 → approved
 const r1 = await call("submit-expense", {
   employee_id: "emp-001",
@@ -81,7 +84,7 @@ const r1 = await call("submit-expense", {
   amount_usd: 45,
   description: "team lunch",
   merchant: "cafe-88",
-  receipt_ref: "R-2026-0001",
+  receipt_ref: `R-${runId}-0001`,
 });
 console.log("1. 小额报销:", JSON.stringify(r1));
 
@@ -92,7 +95,7 @@ const r2 = await call("submit-expense", {
   amount_usd: 600,
   description: "client visit taxi",
   merchant: "city-cab",
-  receipt_ref: "R-2026-0002",
+  receipt_ref: `R-${runId}-0002`,
 });
 console.log("2. 中额报销:", JSON.stringify(r2));
 
@@ -103,7 +106,7 @@ const r3 = await call("submit-expense", {
   amount_usd: 2500,
   description: "gpu server",
   merchant: "cloud-co",
-  receipt_ref: "R-2026-0003",
+  receipt_ref: `R-${runId}-0003`,
 });
 console.log("3. 超额报销:", JSON.stringify(r3));
 
@@ -114,7 +117,7 @@ const r4 = await call("submit-expense", {
   amount_usd: 45,
   description: "team lunch (dup)",
   merchant: "cafe-88",
-  receipt_ref: "R-2026-0001",
+  receipt_ref: `R-${runId}-0001`,
 });
 console.log("4. 重复提交:", JSON.stringify(r4));
 
